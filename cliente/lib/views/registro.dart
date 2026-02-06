@@ -48,6 +48,7 @@ class _RegistroState extends State<Registro> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -56,6 +57,7 @@ class _RegistroState extends State<Registro> {
             image: AssetImage("assets/fondo.png"),
             fit: BoxFit.cover),
         ),
+        child: SafeArea(child: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -258,6 +260,7 @@ class _RegistroState extends State<Registro> {
             ),
           ),
           ],
+        ))
         ),
       ),
     );

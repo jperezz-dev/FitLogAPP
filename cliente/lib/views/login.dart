@@ -30,7 +30,7 @@ class _LoginState extends State<Login> {
         }),
       );
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         print("Usuario logeado!");
       } else {
         print("Error: ${jsonDecode(response.body)['message']}");
@@ -43,6 +43,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -51,6 +52,7 @@ class _LoginState extends State<Login> {
             image: AssetImage("assets/fondo.png"),
             fit: BoxFit.cover),
         ),
+        child: SafeArea(child: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -193,6 +195,8 @@ class _LoginState extends State<Login> {
             ),
           ),
           ],
+        ),
+        ),
         ),
       ),
     );

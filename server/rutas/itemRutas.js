@@ -1,10 +1,11 @@
 import express from "express";
 import Usuario from "../modelos/usuarios.js";
 import bcrypt from "bcryptjs";
+import { inngest } from "../inngest/funciones.js";
 
 const router = express.Router();
 
-// --- REGISTRO ---
+// Ruta de registro
 router.post("/registro", async (req, res) => {
   try {
     const { nombreUsuario, correoUsuario, contrasenhaUsuario } = req.body;
@@ -26,6 +27,12 @@ router.post("/registro", async (req, res) => {
     await nuevoUsuario.save();
     res.status(201).json({ message: "Usuario creado con éxito" });
     console.log(`Usuario registrado: ${nombreUsuario}`);
+
+    // Enviar evento a Inngest
+    inngest.send({
+      name: "app/usuario.registrado",
+      data: { nombreUsuario, correoUsuario }
+    }).catch(err => console.error("Error enviando a Inngest:", err));
 
   } catch (error) {
     res.status(500).json({ message: "Error en el servidor" });
