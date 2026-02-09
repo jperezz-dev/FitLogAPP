@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fitlog_app/views/registro.dart';
+import 'package:fitlog_app/views/inicio.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -32,6 +33,7 @@ class _LoginState extends State<Login> {
 
       if (response.statusCode == 200) {
         print("Usuario logeado!");
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const Inicio())); // Redirección a inicio
       } else {
         print("Error: ${jsonDecode(response.body)['message']}");
       }

@@ -22,3 +22,4 @@ flutter:
   assets:
     - assets/logo.svg
     - assets/fondo.png
+    - assets/spinning_anuncio_fondo.png
