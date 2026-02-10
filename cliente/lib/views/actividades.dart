@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fitlog_app/widgets/actividad_banner.dart';
 
-class Inicio extends StatelessWidget {
-  const Inicio({super.key});
+class Actividades extends StatelessWidget {
+  const Actividades({super.key});
 
   @override
   Widget build(BuildContext context) {
