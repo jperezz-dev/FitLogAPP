@@ -1,8 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:fitlog_app/widgets/actividad_banner.dart';
 
-class Actividades extends StatelessWidget {
+class Actividades extends StatefulWidget {
   const Actividades({super.key});
+
+  @override
+  State<Actividades> createState() => _ActividadesState();
+}
+
+class _ActividadesState extends State<Actividades> {
+  // Controlador para capturar el texto
+  final TextEditingController _searchController = TextEditingController();
+
+  // Lista completa de actividades
+  final List<Map<String, String>> actividadesLista = [
+    {'titulo': 'Crossfit', 'imagen': 'assets/imagen_crossfit.png'},
+    {'titulo': 'Body pump', 'imagen': 'assets/imagen_body_pump.png'},
+    {'titulo': 'Yoga', 'imagen': 'assets/imagen_yoga.png'},
+    {'titulo': 'Spinning', 'imagen': 'assets/imagen_spinning.png'},
+  ];
+
+  // 3. Lista de actividades filtradas
+  List<Map<String, String>> actividadesFiltradas = [];
+
+  @override
+  void initState() {
+    super.initState();
+    actividadesFiltradas =
+        actividadesLista; // Todas las actividades como filtradas inicialmente
+  }
+
+  // Filtrado de actividades
+  void _filtrarActividades(String query) {
+    setState(() {
+      actividadesFiltradas = actividadesLista
+          .where(
+            (act) => act['titulo']!.toLowerCase().contains(query.toLowerCase()),
+          )
+          .toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,123 +48,60 @@ class Actividades extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          // Anuncio spinning clases
-          _buildAnuncioSpinning(),
+          // Barra de búsqueda
+          SearchBar(
+            controller: _searchController,
+            hintText: 'Buscar actividad...',
+            hintStyle: WidgetStateProperty.all(
+              const TextStyle(color: Colors.grey),
+            ),
+            textStyle: WidgetStateProperty.all(
+              const TextStyle(color: Colors.white),
+            ),
+            backgroundColor: WidgetStateProperty.all(
+              Colors.black.withValues(alpha: 0.3),
+            ),
+            padding: const WidgetStatePropertyAll<EdgeInsets>(
+              EdgeInsets.symmetric(horizontal: 16.0),
+            ),
+            leading: const Icon(Icons.search, color: Colors.white),
+            onChanged: (value) => _filtrarActividades(value),
+            side: WidgetStateProperty.all(
+              const BorderSide(color: Color(0xF8CD472A), width: 1),
+            ),
+            shape: WidgetStateProperty.all(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            ),
+          ),
 
           const SizedBox(height: 30),
 
-          // Texto actividades
-          const Text(
-            'Actividades a tu\nmedida:',
-            style: TextStyle(
-              color: Colors.white, 
-              fontSize: 22, 
-              fontWeight: FontWeight.bold
-            ),
-          ),
-
-          const SizedBox(height: 20),
-
-          // Lista de actividades sugeridas
-          ActividadBanner(
-            titulo: 'Clases dirigidas de ',
-            actividad: 'Crossfit',
-            imagenPath: 'assets/imagen_crossfit.png',
-            onReserva: () => print("Reserva Crossfit pulsada"),
-          ),
-          const SizedBox(height: 20),
-
-          ActividadBanner(
-            titulo: 'Clases dirigidas de ',
-            actividad: 'Body pump',
-            imagenPath: 'assets/imagen_body_pump.png',
-            onReserva: () => print("Reserva Body pump"),
-          ),
-          const SizedBox(height: 20),
-
-          ActividadBanner(
-            titulo: 'Clases dirigidas de ',
-            actividad: 'Yoga',
-            imagenPath: 'assets/imagen_yoga.png',
-            onReserva: () => print("Reserva Yoga"),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAnuncioSpinning() {
-    return SizedBox(
-      height: 220,
-      width: double.infinity,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Stack(
-          children: [
-            Image.asset(
-              'assets/spinning_anuncio_fondo.png',
-              height: 220,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-            Positioned.fill(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                      Colors.black.withValues(alpha: 0.8),
-                      Colors.black.withValues(alpha: 0.1),
-                    ],
-                  ),
+          // Carga de la lista filtrada
+          if (actividadesFiltradas.isEmpty) // lista filtrada vacía
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: Text(
+                  "No se encontraron actividades",
+                  style: TextStyle(color: Colors.grey),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+            )
+          else // Actividades filtradas existentes
+            ...actividadesFiltradas.map(
+              (act) => Column(
                 children: [
-                  const Text.rich(
-                    TextSpan(
-                      text: '¡Apúntate a nuestras \nnuevas clases de \n',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: "Spinning",
-                          style: TextStyle(
-                            color: Color(0xFFFF5733),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        TextSpan(text: "!"),
-                      ],
-                    ),
+                  ActividadBanner(
+                    titulo: 'Clases dirigidas de ',
+                    actividad: act['titulo']!,
+                    imagenPath: act['imagen']!,
+                    onReserva: () => print("Reserva ${act['titulo']}"),
                   ),
-                  const SizedBox(height: 15),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFF5733),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    child: const Text('Reservar'),
-                  ),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
-          ],
-        ),
+        ],
       ),
     );
   }
