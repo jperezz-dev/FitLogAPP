@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fitlog_app/widgets/actividad_banner.dart';
 
 class Inicio extends StatefulWidget {
   const Inicio({super.key});
@@ -155,6 +156,36 @@ class _InicioState extends State<Inicio> {
                     'Actividades a tu\nmedida:',
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
+                ),
+
+                const SizedBox(height: 20),
+
+                // Actividad sugerida 1
+                ActividadBanner(
+                  titulo: 'Clases dirigidas de ',
+                  actividad: 'Crossfit',
+                  imagenPath: 'assets/imagen_crossfit.png',
+                  onReserva: () => print("Reserva Crossfit pulsada"),
+                ),
+
+                const SizedBox(height: 20),
+
+                // Actividad sugerida 2
+                ActividadBanner(
+                  titulo: 'Clases dirigidas de ',
+                  actividad: 'Body pump',
+                  imagenPath: 'assets/imagen_body_pump.png',
+                  onReserva: () => print("Reserva Body pump"),
+                ),
+
+                const SizedBox(height: 20),
+
+                // Actividad sugerida 3
+                ActividadBanner(
+                  titulo: 'Clases dirigidas de ',
+                  actividad: 'Yoga',
+                  imagenPath: 'assets/imagen_yoga.png',
+                  onReserva: () => print("Reserva Yoga"),
                 ),
               ],
             ),
