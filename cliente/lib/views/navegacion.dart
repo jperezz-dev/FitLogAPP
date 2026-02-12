@@ -40,6 +40,7 @@ class _NavegacionState extends State<Navegacion> {
 
       // Barra superior
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           paginaActual == 0
               ? "Bienvenido ${UserSession().nombre ?? 'No disponible'}"
@@ -91,7 +92,7 @@ class _NavegacionState extends State<Navegacion> {
         data: NavigationBarThemeData(
           // Estilo del texto (Label) según el estado
           labelTextStyle: WidgetStateProperty.resolveWith((states) {
-            if (paginaActual == 3) {
+            if (paginaActual == 3 || paginaActual == 4) {
               return const TextStyle(color: Colors.white, fontSize: 12);
             } // En el indice 3 todos los textos blancos
 
@@ -106,7 +107,7 @@ class _NavegacionState extends State<Navegacion> {
           }),
           // Estilo de los iconos según el estado
           iconTheme: WidgetStateProperty.resolveWith((states) {
-            if (paginaActual == 3) {
+            if (paginaActual == 3 || paginaActual == 4) {
               return const IconThemeData(
                 size: 24,
                 color: Colors.white,

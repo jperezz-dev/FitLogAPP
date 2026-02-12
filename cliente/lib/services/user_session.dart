@@ -1,7 +1,4 @@
 // Patrón singleton para el manejo de la sesión de usuario
-
-import 'dart:async';
-
 class UserSession {
   UserSession._internal(); // Constructor privado (El "_" le otorga el private)
   static final UserSession _instance = UserSession._internal(); // Instanciado estático y único de la clase
