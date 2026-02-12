@@ -2,6 +2,12 @@ import express from "express";
 import Usuario from "../modelos/usuarios.js";
 import bcrypt from "bcryptjs";
 import { inngest } from "../inngest/funciones.js";
+import Actividades from "../modelos/actividad.js";
+
+// 200 -> Petición correcta
+// 201 -> Creación correcta
+// 400 -> Error en cliente
+// 500 -> Error en servidor
 
 const router = express.Router();
 
@@ -12,7 +18,10 @@ router.post("/registro", async (req, res) => {
 
     // Comprobación de usuario existente
     const usuarioExistente = await Usuario.findOne({ correoUsuario });
-    if (usuarioExistente) return res.status(400).json({ message: "Ya hay un usuario registrado con ese correo." });
+    if (usuarioExistente)
+      return res
+        .status(400)
+        .json({ message: "Ya hay un usuario registrado con ese correo." });
 
     // Contraseña encriptada
     const salt = await bcrypt.genSalt(10); // Salificacion de contraseña
@@ -21,7 +30,7 @@ router.post("/registro", async (req, res) => {
     const nuevoUsuario = new Usuario({
       nombreUsuario,
       correoUsuario,
-      contrasenhaUsuario: hashedPassword
+      contrasenhaUsuario: hashedPassword,
     });
 
     await nuevoUsuario.save();
@@ -29,11 +38,12 @@ router.post("/registro", async (req, res) => {
     console.log(`Usuario registrado: ${nombreUsuario}`);
 
     // Enviar evento a Inngest
-    inngest.send({
-      name: "app/usuario.registrado",
-      data: { nombreUsuario, correoUsuario }
-    }).catch(err => console.error("Error enviando a Inngest:", err));
-
+    inngest
+      .send({
+        name: "app/usuario.registrado",
+        data: { nombreUsuario, correoUsuario },
+      })
+      .catch((err) => console.error("Error enviando a Inngest:", err));
   } catch (error) {
     res.status(500).json({ message: "Error en el servidor" });
   }
@@ -46,24 +56,41 @@ router.post("/login", async (req, res) => {
 
     // Busca usuario
     const usuario = await Usuario.findOne({ correoUsuario });
-    if (!usuario) return res.status(400).json({ message: "Usuario inexistente" });
+    if (!usuario)
+      return res.status(400).json({ message: "Usuario inexistente" });
 
     // Compara contraseñas
-    const isMatch = await bcrypt.compare(contrasenhaUsuario, usuario.contrasenhaUsuario);
-    if (!isMatch) return res.status(400).json({ message: "Contraseña incorrecta" });
+    const isMatch = await bcrypt.compare(
+      contrasenhaUsuario,
+      usuario.contrasenhaUsuario,
+    );
+    if (!isMatch)
+      return res.status(400).json({ message: "Contraseña incorrecta" });
 
     console.log(`Login exitoso: ${usuario.nombreUsuario}`);
     res.json({
       message: "Inicio de sesión correcto",
-      user: { 
-        id: usuario._id, 
-        nombre: usuario.nombreUsuario, 
-        correo: usuario.correoUsuario 
-      }
+      user: {
+        id: usuario._id,
+        nombre: usuario.nombreUsuario,
+        correo: usuario.correoUsuario,
+      },
     });
-
   } catch (error) {
     res.status(500).json({ message: "Error al iniciar sesión" });
+  }
+});
+
+// Ruta para añadir actividades
+router.post("/actividades", async (req, res) => {
+  try {
+    const nuevaActividad = new Actividades(req.body);
+    await nuevaActividad.save();
+    res
+      .status(201)
+      .json({ message: "Actividad creada correctamente", nuevaActividad });
+  } catch {
+    res.status(400).json({ error: error.message });
   }
 });
 
