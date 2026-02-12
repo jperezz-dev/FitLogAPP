@@ -1,8 +1,10 @@
+import 'package:fitlog_app/services/user_session.dart';
 import 'package:flutter/material.dart';
 import 'package:fitlog_app/views/inicio.dart';
 import 'package:fitlog_app/views/actividades.dart';
 import 'package:fitlog_app/views/reservas.dart';
 import 'package:fitlog_app/views/perfil.dart';
+import 'package:fitlog_app/views/admin.dart';
 
 class Navegacion extends StatefulWidget {
   const Navegacion({super.key});
@@ -13,6 +15,8 @@ class Navegacion extends StatefulWidget {
 
 class _NavegacionState extends State<Navegacion> {
   int paginaActual = 0;
+  bool? esAdministrador =
+      UserSession().administrador; // Detecta el administrador (nullsafe)
 
   // Lista de vistas
   final List<Widget> paginas = [
@@ -20,12 +24,16 @@ class _NavegacionState extends State<Navegacion> {
     const Actividades(),
     const Reservas(),
     const Perfil(),
+    const Admin(),
   ];
 
   @override
   Widget build(BuildContext context) {
     bool esPerfil =
         paginaActual == 3; // Booleando para saber si estamos en el perfil
+    bool esAdminVista =
+        paginaActual ==
+        4; // Booleano para saber si estamos en la vista de admin
 
     return Scaffold(
       backgroundColor: const Color(0xFF0E0E0E),
@@ -34,16 +42,32 @@ class _NavegacionState extends State<Navegacion> {
       appBar: AppBar(
         title: Text(
           paginaActual == 0
-              ? 'Bienvenido!'
+              ? "Bienvenido ${UserSession().nombre ?? 'No disponible'}"
               : paginaActual == 1
               ? 'Actividades'
               : paginaActual == 2
               ? 'Mis reservas'
-              : 'Mi Perfil',
+              : paginaActual == 3
+              ? 'Mi Perfil'
+              : 'Panel administrativo',
           style: const TextStyle(color: Colors.white, fontSize: 18),
         ),
         backgroundColor: const Color(0xFF0E0E0E),
         actions: [
+          if (esAdministrador == true)
+            IconButton(
+              icon: Icon(
+                Icons.admin_panel_settings_outlined,
+                color: esAdminVista
+                    ? const Color(0xF8CD472A)
+                    : Colors
+                          .white, // Color resaltado al estar en vista de administrador
+                size: 35,
+              ),
+              onPressed: () => setState(() {
+                paginaActual = 4;
+              }),
+            ),
           IconButton(
             icon: Icon(
               Icons.account_circle_outlined,
@@ -68,10 +92,7 @@ class _NavegacionState extends State<Navegacion> {
           // Estilo del texto (Label) según el estado
           labelTextStyle: WidgetStateProperty.resolveWith((states) {
             if (paginaActual == 3) {
-              return const TextStyle(
-                color: Colors.white,
-                fontSize: 12
-              );
+              return const TextStyle(color: Colors.white, fontSize: 12);
             } // En el indice 3 todos los textos blancos
 
             if (states.contains(WidgetState.selected)) {
