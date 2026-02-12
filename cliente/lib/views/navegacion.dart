@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fitlog_app/views/inicio.dart';
 import 'package:fitlog_app/views/actividades.dart';
 import 'package:fitlog_app/views/reservas.dart';
+import 'package:fitlog_app/views/perfil.dart';
 
 class Navegacion extends StatefulWidget {
   const Navegacion({super.key});
@@ -18,10 +19,14 @@ class _NavegacionState extends State<Navegacion> {
     const Inicio(),
     const Actividades(),
     const Reservas(),
+    const Perfil(),
   ];
 
   @override
   Widget build(BuildContext context) {
+    bool esPerfil =
+        paginaActual == 3; // Booleando para saber si estamos en el perfil
+
     return Scaffold(
       backgroundColor: const Color(0xFF0E0E0E),
 
@@ -29,21 +34,27 @@ class _NavegacionState extends State<Navegacion> {
       appBar: AppBar(
         title: Text(
           paginaActual == 0
-              ? '¡Bienvenido!'
+              ? 'Bienvenido!'
               : paginaActual == 1
               ? 'Actividades'
-              : 'Mis Reservas',
+              : paginaActual == 2
+              ? 'Mis reservas'
+              : 'Mi Perfil',
           style: const TextStyle(color: Colors.white, fontSize: 18),
         ),
         backgroundColor: const Color(0xFF0E0E0E),
         actions: [
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.account_circle_outlined,
-              color: Colors.white,
+              color: esPerfil
+                  ? const Color(0xF8CD472A)
+                  : Colors.white, // Color resaltado al estar en perfil
               size: 35,
             ),
-            onPressed: () => print("Perfil"),
+            onPressed: () => setState(() {
+              paginaActual = 3;
+            }),
           ),
         ],
       ),
@@ -56,6 +67,13 @@ class _NavegacionState extends State<Navegacion> {
         data: NavigationBarThemeData(
           // Estilo del texto (Label) según el estado
           labelTextStyle: WidgetStateProperty.resolveWith((states) {
+            if (paginaActual == 3) {
+              return const TextStyle(
+                color: Colors.white,
+                fontSize: 12
+              );
+            } // En el indice 3 todos los textos blancos
+
             if (states.contains(WidgetState.selected)) {
               return const TextStyle(
                 color: Color(0xF8CD472A),
@@ -63,10 +81,17 @@ class _NavegacionState extends State<Navegacion> {
                 fontWeight: FontWeight.bold,
               );
             }
-            return const TextStyle(color: Colors.grey, fontSize: 12);
+            return const TextStyle(color: Colors.white, fontSize: 12);
           }),
           // Estilo de los iconos según el estado
           iconTheme: WidgetStateProperty.resolveWith((states) {
+            if (paginaActual == 3) {
+              return const IconThemeData(
+                size: 24,
+                color: Colors.white,
+              ); // En el indice 3 todos los iconos blancos
+            }
+
             if (states.contains(WidgetState.selected)) {
               return const IconThemeData(size: 30, color: Color(0xF8CD472A));
             }
@@ -74,7 +99,7 @@ class _NavegacionState extends State<Navegacion> {
           }),
         ),
         child: NavigationBar(
-          selectedIndex: paginaActual,
+          selectedIndex: paginaActual > 2 ? 0 : paginaActual,
           onDestinationSelected: (int index) {
             setState(() {
               paginaActual = index;
