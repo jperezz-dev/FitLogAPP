@@ -47,7 +47,7 @@ class Inicio extends StatelessWidget {
           const SizedBox(height: 20),
 
           ActividadBanner(
-            titulo: 'Clases dirigidas de ',
+            titulo: 'Clases de iniciación al ',
             actividad: 'Yoga',
             imagenPath: 'assets/imagen_yoga.png',
             onReserva: () => print("Reserva Yoga"),
