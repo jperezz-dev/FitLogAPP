@@ -3,6 +3,7 @@ import Usuario from "../modelos/usuarios.js";
 import bcrypt from "bcryptjs";
 import { inngest } from "../inngest/funciones.js";
 import Actividades from "../modelos/actividad.js";
+import { RegistroSchema } from "../validaciones/autenticacion.js";
 
 // 200 -> Petición correcta
 // 201 -> Creación correcta
@@ -13,6 +14,16 @@ const router = express.Router();
 
 // Ruta de registro
 router.post("/registro", async (req, res) => {
+  const validacion = RegistroSchema.safeParse(req.body); // Safeparse para recibir booleano como respuesta y evitar try/cath
+
+  if (!validacion.success) {
+    // Si los datos no cumplen con el formato envíamos error de cliente al front
+    return res.status(400).json({
+      message: "Datos de registro inválidos",
+      errors: formatZodErrors(validacion.error),
+    });
+  }
+
   try {
     const { nombreUsuario, correoUsuario, contrasenhaUsuario } = req.body;
 
@@ -51,6 +62,16 @@ router.post("/registro", async (req, res) => {
 
 // Ruta para crear usuarios
 router.post("/login", async (req, res) => {
+  const validacion = LoginSchema.safeParse(req.body);
+
+  if (!validacion.success) {
+    // Si los datos no cumplen con el formato envíamos error de cliente al front
+    return res.status(400).json({
+      message: "Datos de acceso inválidos",
+      errors: formatZodErrors(validacion.error),
+    });
+  }
+
   try {
     const { correoUsuario, contrasenhaUsuario } = req.body;
 

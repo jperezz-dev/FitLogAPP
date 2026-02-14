@@ -29,7 +29,8 @@
     "express": "^5.2.1",
     "inngest": "^3.51.0",
     "mongoose": "^9.1.6",
-    "nodemailer": "^8.0.0"
+    "nodemailer": "^8.0.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
