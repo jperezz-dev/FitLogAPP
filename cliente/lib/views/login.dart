@@ -1,3 +1,4 @@
+import 'package:fitlog_app/services/user_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fitlog_app/views/registro.dart';
@@ -33,6 +34,9 @@ class _LoginState extends State<Login> {
 
       if (response.statusCode == 200) {
         print("Usuario logeado!");
+        var datos = jsonDecode(response.body); // Guardado de datos enviados desde el backend
+        print(datos);
+        UserSession().guardarDatos(datos['user']); // Guardado de datos
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const Navegacion()),

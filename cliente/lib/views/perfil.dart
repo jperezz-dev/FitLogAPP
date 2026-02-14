@@ -1,3 +1,4 @@
+import 'package:fitlog_app/services/user_session.dart';
 import 'package:flutter/material.dart';
 
 class Perfil extends StatelessWidget {
@@ -17,7 +18,7 @@ class Perfil extends StatelessWidget {
               style: const TextStyle(color: Colors.white, fontSize: 18),
               children: [
                 TextSpan(
-                  text: '',
+                  text: UserSession().nombre ?? "No disponible", // ?? "No disponible" para Null safety
                   style: const TextStyle(color: Colors.white, fontSize: 18),
                 ),
               ],
@@ -32,7 +33,7 @@ class Perfil extends StatelessWidget {
               style: const TextStyle(color: Colors.white, fontSize: 18),
               children: [
                 TextSpan(
-                  text: '',
+                  text: UserSession().correo ?? "No disponible", // ?? "No disponible" para Null safety,
                   style: const TextStyle(color: Colors.white, fontSize: 18),
                 ),
               ],
@@ -47,7 +48,7 @@ class Perfil extends StatelessWidget {
               style: const TextStyle(color: Colors.white, fontSize: 18),
               children: [
                 TextSpan(
-                  text: '',
+                  text: UserSession().fechaCreacion ?? "No disponible", // ?? "No disponible" para Null safety,
                   style: const TextStyle(color: Colors.white, fontSize: 18),
                 ),
               ],
