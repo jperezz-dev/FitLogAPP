@@ -1,5 +1,3 @@
-const { z } = require("zod")
-
 import { z } from "zod";
 
 // Esquema del registro

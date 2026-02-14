@@ -1,6 +1,5 @@
+import 'package:fitlog_app/widgets/calendario.dart';
 import 'package:flutter/material.dart';
-
-// Implementar https://pub.dev/packages/table_calendar
 
 class Reservas extends StatelessWidget {
   const Reservas({super.key});
@@ -12,8 +11,6 @@ class Reservas extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 30),
-
           // Texto actividades
           const Text(
             'Reservas activas:',
@@ -23,6 +20,15 @@ class Reservas extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
+
+          const SizedBox(height: 20),
+
+          // Calendario de reservas
+          Calendario(
+            onFechaSeleccionada: (fecha) {
+            },
+          ),
+
           const SizedBox(height: 20),
         ],
       ),

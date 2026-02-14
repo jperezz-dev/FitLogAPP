@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { inngest } from "../inngest/funciones.js";
 import Actividades from "../modelos/actividad.js";
 import { RegistroSchema } from "../validaciones/autenticacion.js";
+import { LoginSchema } from "../validaciones/autenticacion.js";
 import jwt from "jsonwebtoken";
 
 // 200 -> Petición correcta
@@ -92,8 +93,8 @@ router.post("/login", async (req, res) => {
     // Generación del token
     const token = jwt.sign(
       { id: usuario._id, admin: usuario.administrador },
-      JWT_ACCESS_SECRET,
-      { expiresIn: JWT_ACCESS_EXPIRES_IN }
+      process.env.JWT_ACCESS_SECRET,
+      { expiresIn: process.env.JWT_ACCESS_EXPIRES_IN }
     );
 
     console.log(`Login exitoso: ${usuario.nombreUsuario}`);
