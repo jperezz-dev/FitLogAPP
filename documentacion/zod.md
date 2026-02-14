@@ -2,7 +2,7 @@
 
 Para la validación de datos en el backend, he implementado Zod para permitirme definir esquemas para los datos que recibo tanto de la aplicación móvil (Flutter) como de la aplicación de escritorio (Vue), asegurando que la información sea correcta antes de interactuar con la base de datos MongoDB.
 
-## Proceso de implementación de inngest:
+## Proceso de implementación de zod:
 
 ### Instalación de paquetes:
 
@@ -53,7 +53,7 @@ export function formatZodErrors(error) {
 En el archivo de rutas, utilizo el método safeParse para validar el cuerpo de la petición. Si la validación falla, devuelvo un código de estado 400 (Error de cliente) con los errores detallados:
 
 ```
-  const validacion = RegistroSchema.safeParse(req.body); // Safeparse para recibir booleano como respuesta y evitar try/cath
+const validacion = RegistroSchema.safeParse(req.body); // Safeparse para recibir booleano como respuesta y evitar try/cath
 
   if (!validacion.success) {
     // Si los datos no cumplen con el formato envíamos error de cliente al front

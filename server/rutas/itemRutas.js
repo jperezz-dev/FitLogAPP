@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { inngest } from "../inngest/funciones.js";
 import Actividades from "../modelos/actividad.js";
 import { RegistroSchema } from "../validaciones/autenticacion.js";
+import jwt from "jsonwebtoken";
 
 // 200 -> Petición correcta
 // 201 -> Creación correcta
@@ -88,9 +89,17 @@ router.post("/login", async (req, res) => {
     if (!isMatch)
       return res.status(400).json({ message: "Contraseña incorrecta" });
 
+    // Generación del token
+    const token = jwt.sign(
+      { id: usuario._id, admin: usuario.administrador },
+      JWT_ACCESS_SECRET,
+      { expiresIn: JWT_ACCESS_EXPIRES_IN }
+    );
+
     console.log(`Login exitoso: ${usuario.nombreUsuario}`);
     res.json({
       message: "Inicio de sesión correcto",
+      token: token,
       user: {
         id: usuario._id,
         nombre: usuario.nombreUsuario,

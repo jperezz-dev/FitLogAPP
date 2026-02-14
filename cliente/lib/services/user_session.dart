@@ -12,13 +12,15 @@ class UserSession {
   String? correo;
   String? fechaCreacion;
   bool? administrador;
+  String? token;
 
   // Guardado de datos
-  void guardarDatos(Map<String, dynamic> data) {
+  void guardarDatos(Map<String, dynamic> data, String? tokenRecibido) {
     id = data['id'];
     nombre = data['nombre'];
     correo = data['correo'];
     fechaCreacion = data['fechaCreacion'];
     administrador = data['administrador'];
+    token = tokenRecibido;
   }
 }

@@ -36,7 +36,7 @@ class _LoginState extends State<Login> {
         print("Usuario logeado!");
         var datos = jsonDecode(response.body); // Guardado de datos enviados desde el backend
         print(datos);
-        UserSession().guardarDatos(datos['user']); // Guardado de datos
+        UserSession().guardarDatos(datos['user'], datos['token']); // Guardado de datos
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const Navegacion()),
