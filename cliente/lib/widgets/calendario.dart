@@ -35,6 +35,8 @@ class _CalendarioState extends State<Calendario> {
         focusedDay: _diaEnfocado,
         locale: 'es_ES',
 
+        selectedDayPredicate: (day) => isSameDay(_diaSeleccionado, day),
+
         // Estilos del header
         headerStyle: const HeaderStyle(
           decoration: BoxDecoration(
@@ -73,8 +75,14 @@ class _CalendarioState extends State<Calendario> {
           ),
           outsideDaysVisible: false,
 
-          selectedDecoration: const BoxDecoration(shape: BoxShape.circle),
-          selectedTextStyle: const TextStyle(color: Colors.white),
+          selectedDecoration: const BoxDecoration(
+            color: Color(0xF8CD472A),
+            shape: BoxShape.circle,
+          ),
+          selectedTextStyle: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
 
           todayDecoration: BoxDecoration(
             border: Border.all(color: const Color(0xF8CD472A), width: 1),

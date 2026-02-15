@@ -20,6 +20,20 @@ class _AdminState extends State<Admin> {
   Future<void> enviarActividad() async {
     final String url = "http://10.0.2.2:3000/actividades";
 
+    final DateTime fechaHoraCombinada = DateTime( // Formato de la fecha a lo aceptado por el backend de mongo (Año-mes-dia-hora-minuto)
+      _fecha.year,
+      _fecha.month,
+      _fecha.day,
+      _hora.hour,
+      _hora.minute,
+    );
+
+    // Formateado del texto a los campos aceptadas en el backend
+    String tipoLimpio = "Crossfit";
+    if (_actividad.contains("Yoga")) tipoLimpio = "Yoga";
+    if (_actividad.contains("Spinning")) tipoLimpio = "Spinning";
+    if (_actividad.contains("Body Pump")) tipoLimpio = "Body pump";
+
     try {
       final response = await http.post(
         Uri.parse(url),
@@ -28,9 +42,9 @@ class _AdminState extends State<Admin> {
           "Authorization": "Bearer ${UserSession().token}",
         },
         body: jsonEncode({
-          "nombre": _actividad,
-          "fecha": _fecha.toIso8601String(),
-          "hora": "${_hora.hour}:${_hora.minute}",
+          "tipoActividad": tipoLimpio,
+          "fechaHora": fechaHoraCombinada.toIso8601String(),
+          "plazasMaximas": 20,
         }),
       );
 
@@ -90,7 +104,13 @@ class _AdminState extends State<Admin> {
               ),
               const SizedBox(height: 10),
               // Seleccion de fecha
-              Calendario(onFechaSeleccionada: (fecha) {}),
+              Calendario(
+                onFechaSeleccionada: (fechaElegida) {
+                  setState(() {
+                    _fecha = fechaElegida;
+                  });
+                },
+              ),
 
               const SizedBox(height: 20),
               _buildSubmitButton(), // Llamada a boton
