@@ -83,7 +83,7 @@ class _CalendarioState extends State<Calendario> {
           todayTextStyle: const TextStyle(color: Colors.white),
 
           markerDecoration: const BoxDecoration(
-            color: Color(0xF8CD472A), // Naranja corporativo
+            color: Color(0xF8CD472A),
             shape: BoxShape.circle,
           ),
         ),
