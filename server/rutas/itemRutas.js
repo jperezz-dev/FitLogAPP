@@ -94,7 +94,7 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign(
       { id: usuario._id, admin: usuario.administrador },
       process.env.JWT_ACCESS_SECRET,
-      { expiresIn: process.env.JWT_ACCESS_EXPIRES_IN }
+      { expiresIn: process.env.JWT_ACCESS_EXPIRES_IN },
     );
 
     console.log(`Login exitoso: ${usuario.nombreUsuario}`);
@@ -124,6 +124,58 @@ router.post("/actividades", async (req, res) => {
       .json({ message: "Actividad creada correctamente", nuevaActividad });
   } catch {
     res.status(400).json({ error: error.message });
+  }
+});
+
+// Ruta de filtrado de actividades
+router.get("/actividades/buscar", async (req, res) => {
+  try {
+    const { tipo, fecha } = req.query;
+
+    // Rango completo de horas
+    const inicioDia = new Date(fecha);
+    inicioDia.setHours(0, 0, 0, 0);
+    const finDia = new Date(fecha);
+    finDia.setHours(23, 59, 59, 999);
+
+    const actividadesEncontradas = await Actividades.find({
+      tipoActividad: tipo,
+      fechaHora: {
+        $gte: inicioDia,
+        $lte: finDia,
+      },
+    });
+
+    res.json(actividadesEncontradas);
+  } catch (error) {
+    console.error("Error al buscar actividades:", error);
+    res.status(500).json({ message: "Error en el servidor al buscar clases" });
+  }
+});
+
+// Ruta inscripción actividad
+router.post("/actividades/reservar", async (req, res) => {
+  try {
+    const { actividadId, usuarioId } = req.body;
+
+    const actividad = await Actividades.findById(actividadId);
+
+    // ¿Ya inscrito?
+    if (actividad.usuariosInscritos.includes(usuarioId)) {
+      return res.status(400).json({ message: "Ya estás inscrito en esta clase" });
+    }
+
+    // ¿Plazas libres?
+    if (actividad.usuariosInscritos.length >= actividad.plazasMaximas) {
+      return res.status(400).json({ message: "No quedan plazas disponibles" });
+    }
+
+    actividad.usuariosInscritos.push(usuarioId);
+    await actividad.save();
+
+    res.json({ message: "Reserva realizada con éxito" });
+  } catch (error) {
+    res.status(500).json({ message: "Error al procesar la reserva" });
   }
 });
 

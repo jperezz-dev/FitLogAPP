@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fitlog_app/widgets/actividad_banner.dart';
+import 'package:fitlog_app/views/reserva_actividad.dart';
 
 class Actividades extends StatefulWidget {
   const Actividades({super.key});
@@ -95,7 +96,15 @@ class _ActividadesState extends State<Actividades> {
                     titulo: 'Clases dirigidas de ',
                     actividad: act['titulo']!,
                     imagenPath: act['imagen']!,
-                    onReserva: () => print("Reserva ${act['titulo']}"),
+                    onReserva: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ReservaActividad(tipoActividad: act['titulo']!),
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 20),
                 ],

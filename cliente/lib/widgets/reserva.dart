@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 
-class ActividadBanner extends StatelessWidget {
+class ReservaBanner extends StatelessWidget {
   final String titulo;
   final String actividad;
+  final String hora;
+  final int plazas;
   final String imagenPath;
-  final VoidCallback onCancelacion;
+  final VoidCallback onReserva;
 
-  const ActividadBanner({
+  const ReservaBanner({
     super.key,
     required this.titulo,
     required this.actividad,
+    required this.hora,
+    required this.plazas,
     required this.imagenPath,
-    required this.onCancelacion,
+    required this.onReserva,
   });
 
   @override
@@ -55,7 +59,7 @@ class ActividadBanner extends StatelessWidget {
                         children: [
                           Text.rich(
                             TextSpan(
-                              text: '$titulo\n',
+                              text: '$titulo $hora\n',
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
@@ -70,6 +74,14 @@ class ActividadBanner extends StatelessWidget {
                                     fontSize: 18,
                                   ),
                                 ),
+                                TextSpan(
+                                  text: '\nPlazas libres: $plazas',
+                                  style: const TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -77,9 +89,9 @@ class ActividadBanner extends StatelessWidget {
                       ),
                     ),
 
-                    // Botón de cancelacion reserva
+                    // Botón de reserva
                     ElevatedButton(
-                      onPressed: onCancelacion,
+                      onPressed: onReserva,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(221, 255, 88, 51),
                         padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -88,7 +100,7 @@ class ActividadBanner extends StatelessWidget {
                         ),
                       ),
                       child: const Text(
-                        'Cancelar',
+                        'Reservar',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
