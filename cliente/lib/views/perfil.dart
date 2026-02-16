@@ -6,6 +6,9 @@ class Perfil extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    DateTime fecha = DateTime.parse(UserSession().fechaCreacion!);
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24.0),
       child: Column(
@@ -44,11 +47,11 @@ class Perfil extends StatelessWidget {
 
           Text.rich(
             TextSpan(
-              text: 'Miembros desde: ',
+              text: 'Miembro desde: ',
               style: const TextStyle(color: Colors.white, fontSize: 18),
               children: [
                 TextSpan(
-                  text: UserSession().fechaCreacion ?? "No disponible", // ?? "No disponible" para Null safety,
+                  text: "${fecha.day.toString().padLeft(2, '0')}-${fecha.month.toString().padLeft(2, '0')}-${fecha.year}", // padLeft para que no se quede 2-2-2024 sino 02-02-2024
                   style: const TextStyle(color: Colors.white, fontSize: 18),
                 ),
               ],
