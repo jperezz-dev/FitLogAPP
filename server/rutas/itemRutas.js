@@ -5,6 +5,7 @@ import { inngest } from "../inngest/funciones.js";
 import Actividades from "../modelos/actividad.js";
 import { RegistroSchema } from "../validaciones/autenticacion.js";
 import { LoginSchema } from "../validaciones/autenticacion.js";
+import { formatZodErrors } from "../validaciones/autenticacion.js";
 import jwt from "jsonwebtoken";
 
 // 200 -> Petición correcta
@@ -176,6 +177,40 @@ router.post("/actividades/reservar", async (req, res) => {
     res.json({ message: "Reserva realizada con éxito" });
   } catch (error) {
     res.status(500).json({ message: "Error al procesar la reserva" });
+  }
+});
+
+// Ruta para recibir actividades inscritas
+router.get("/usuarios/:usuarioId/reservas", async (req, res) => {
+  try {
+    const { usuarioId } = req.params;
+    const { fecha } = req.query;
+
+    const inicioDia = new Date(fecha);
+    const finDia = new Date(fecha);
+    finDia.setHours(23, 59, 59, 999);
+
+    const misReservas = await Actividades.find({
+      usuariosInscritos: usuarioId,
+      fechaHora: { $gte: inicioDia, $lte: finDia }
+    });
+
+    res.json(misReservas);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener tus reservas" });
+  }
+});
+
+// Ruta para cancelar reservas
+router.post("/actividades/cancelar", async (req, res) => {
+  try {
+    const { actividadId, usuarioId } = req.body;
+    await Actividades.findByIdAndUpdate(actividadId, {
+      $pull: { usuariosInscritos: usuarioId }
+    });
+    res.json({ message: "Reserva cancelada correctamente" });
+  } catch (error) {
+    res.status(500).json({ message: "Error al cancelar" });
   }
 });
 

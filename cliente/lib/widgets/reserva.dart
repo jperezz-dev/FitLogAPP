@@ -7,6 +7,7 @@ class ReservaBanner extends StatelessWidget {
   final int plazas;
   final String imagenPath;
   final VoidCallback onReserva;
+  final bool esCancelacion;
 
   const ReservaBanner({
     super.key,
@@ -16,6 +17,7 @@ class ReservaBanner extends StatelessWidget {
     required this.plazas,
     required this.imagenPath,
     required this.onReserva,
+    this.esCancelacion = false,
   });
 
   @override
@@ -74,14 +76,15 @@ class ReservaBanner extends StatelessWidget {
                                     fontSize: 18,
                                   ),
                                 ),
-                                TextSpan(
-                                  text: '\nPlazas libres: $plazas',
-                                  style: const TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w400,
+                                if (!esCancelacion)
+                                  TextSpan(
+                                    text: '\nPlazas libres: $plazas',
+                                    style: const TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
+                                    ),
                                   ),
-                                ),
                               ],
                             ),
                           ),
@@ -99,9 +102,9 @@ class ReservaBanner extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      child: const Text(
-                        'Reservar',
-                        style: TextStyle(color: Colors.white),
+                      child: Text(
+                        esCancelacion ? 'Cancelar' : 'Reservar',
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ],
