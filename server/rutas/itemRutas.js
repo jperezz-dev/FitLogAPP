@@ -214,4 +214,21 @@ router.post("/actividades/cancelar", async (req, res) => {
   }
 });
 
+// Ruta historial reservas
+router.get("/usuarios/:usuarioId/historial", async (req, res) => {
+  try {
+    const { usuarioId } = req.params;
+    const ahora = new Date();
+
+    const historial = await Actividades.find({
+      usuariosInscritos: usuarioId,
+      fechaHora: { $lt: ahora } // $lt es menor que, es decir la dechahora será menor que la actual
+    }).sort({ fechaHora: -1 }); // más recientes primero
+
+    res.json(historial);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener historial" });
+  }
+});
+
 export default router;

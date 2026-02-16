@@ -171,6 +171,7 @@ class _ReservaActividadState extends State<ReservaActividad> {
                           plazas: plazasCalculadas,
                           imagenPath: _obtenerImagenPath(widget.tipoActividad),
                           esCancelacion: false,
+                          esAnterior: false,
                           onReserva: () {
                             _realizarReserva(clase['_id']);
                           },

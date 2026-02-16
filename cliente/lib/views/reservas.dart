@@ -152,6 +152,7 @@ class _ReservasState extends State<Reservas> {
                             reserva['tipoActividad']?.toString() ?? "",
                           ),
                           esCancelacion: true,
+                          esAnterior: false,
                           onReserva: () => _cancelarReserva(reserva['_id']),
                         ),
                       );

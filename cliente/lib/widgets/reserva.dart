@@ -8,6 +8,7 @@ class ReservaBanner extends StatelessWidget {
   final String imagenPath;
   final VoidCallback onReserva;
   final bool esCancelacion;
+  final bool? esAnterior;
 
   const ReservaBanner({
     super.key,
@@ -18,6 +19,7 @@ class ReservaBanner extends StatelessWidget {
     required this.imagenPath,
     required this.onReserva,
     this.esCancelacion = false,
+    this.esAnterior = false,
   });
 
   @override
@@ -76,7 +78,7 @@ class ReservaBanner extends StatelessWidget {
                                     fontSize: 18,
                                   ),
                                 ),
-                                if (!esCancelacion)
+                                if (!esAnterior! && !esCancelacion)
                                   TextSpan(
                                     text: '\nPlazas libres: $plazas',
                                     style: const TextStyle(
@@ -93,20 +95,21 @@ class ReservaBanner extends StatelessWidget {
                     ),
 
                     // Botón de reserva
-                    ElevatedButton(
-                      onPressed: onReserva,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(221, 255, 88, 51),
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                    if (!esAnterior!)
+                      ElevatedButton(
+                        onPressed: onReserva,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromARGB(221, 255, 88, 51),
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: Text(
+                          esCancelacion ? 'Cancelar' : 'Reservar',
+                          style: const TextStyle(color: Colors.white),
                         ),
                       ),
-                      child: Text(
-                        esCancelacion ? 'Cancelar' : 'Reservar',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
                   ],
                 ),
               ),
