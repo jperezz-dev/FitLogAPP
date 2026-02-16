@@ -33,16 +33,22 @@ class _LoginState extends State<Login> {
       );
 
       if (response.statusCode == 200) {
-        print("Usuario logeado!");
-        var datos = jsonDecode(response.body); // Guardado de datos enviados desde el backend
-        print(datos);
-        UserSession().guardarDatos(datos['user'], datos['token']); // Guardado de datos
+        var datos = jsonDecode(
+          response.body,
+        ); // Guardado de datos enviados desde el backend
+        UserSession().guardarDatos(
+          datos['user'],
+          datos['token'],
+        ); // Guardado de datos
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const Navegacion()),
         ); // Redirección a inicio
       } else {
-        print("Error: ${jsonDecode(response.body)['message']}");
+        final error = jsonDecode(response.body);
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(error['message'])));
       }
     } catch (e) {
       print("Error de conexión: $e");
@@ -71,13 +77,10 @@ class _LoginState extends State<Login> {
                 const SizedBox(height: 20),
                 SvgPicture.asset(
                   'assets/logo.svg',
-                  height:
-                      200,
-                  fit: BoxFit
-                      .scaleDown,
+                  height: 200,
+                  fit: BoxFit.scaleDown,
                   alignment: Alignment.center,
-                  clipBehavior: Clip
-                      .none,
+                  clipBehavior: Clip.none,
                 ),
 
                 const SizedBox(height: 48),
