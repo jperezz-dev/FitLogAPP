@@ -154,6 +154,35 @@ router.get("/actividades/buscar", async (req, res) => {
   }
 });
 
+// Ruta de filtrado de actividades de X dia en adelante
+router.get("/actividades/disponibles", async (req, res) => {
+  try {
+    const { tipo } = req.query;
+    const ahora = new Date();
+
+    const query = {
+      fechaHora: { $gte: ahora },
+    };
+
+    if (tipo) {
+      query.tipoActividad = { $regex: new RegExp(tipo, "i") };
+    }
+
+    const actividades = await Actividades.find(query).sort({ fechaHora: 1 });
+
+    if (actividades.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No hay actividades disponibles" });
+    }
+
+    res.json(actividades);
+  } catch (error) {
+    console.error("Error en actividades disponibles:", error);
+    res.status(500).json({ message: "Error en el servidor" });
+  }
+});
+
 // Ruta inscripción actividad
 router.post("/actividades/reservar", async (req, res) => {
   try {
@@ -163,7 +192,9 @@ router.post("/actividades/reservar", async (req, res) => {
 
     // ¿Ya inscrito?
     if (actividad.usuariosInscritos.includes(usuarioId)) {
-      return res.status(400).json({ message: "Ya estás inscrito en esta clase" });
+      return res
+        .status(400)
+        .json({ message: "Ya estás inscrito en esta clase" });
     }
 
     // ¿Plazas libres?
@@ -192,11 +223,29 @@ router.get("/usuarios/:usuarioId/reservas", async (req, res) => {
 
     const misReservas = await Actividades.find({
       usuariosInscritos: usuarioId,
-      fechaHora: { $gte: inicioDia, $lte: finDia }
+      fechaHora: { $gte: inicioDia, $lte: finDia },
     });
 
     res.json(misReservas);
   } catch (error) {
+    res.status(500).json({ message: "Error al obtener tus reservas" });
+  }
+});
+
+// Ruta de filtrado de actividades de X dia en adelante
+router.get("/usuarios/:usuarioId/reservasDisponibles", async (req, res) => {
+  try {
+    const { usuarioId } = req.params;
+    const ahora = new Date();
+
+    const misReservas = await Actividades.find({
+      usuariosInscritos: usuarioId,
+      fechaHora: { $gte: ahora }
+    }).sort({ fechaHora: 1 });
+
+    res.json(misReservas);
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error al obtener tus reservas" });
   }
 });
@@ -206,7 +255,7 @@ router.post("/actividades/cancelar", async (req, res) => {
   try {
     const { actividadId, usuarioId } = req.body;
     await Actividades.findByIdAndUpdate(actividadId, {
-      $pull: { usuariosInscritos: usuarioId }
+      $pull: { usuariosInscritos: usuarioId },
     });
     res.json({ message: "Reserva cancelada correctamente" });
   } catch (error) {
@@ -222,7 +271,7 @@ router.get("/usuarios/:usuarioId/historial", async (req, res) => {
 
     const historial = await Actividades.find({
       usuariosInscritos: usuarioId,
-      fechaHora: { $lt: ahora } // $lt es menor que, es decir la dechahora será menor que la actual
+      fechaHora: { $lt: ahora }, // $lt es menor que, es decir la dechahora será menor que la actual
     }).sort({ fechaHora: -1 }); // más recientes primero
 
     res.json(historial);
