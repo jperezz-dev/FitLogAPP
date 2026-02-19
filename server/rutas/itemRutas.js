@@ -183,6 +183,30 @@ router.get("/actividades/disponibles", async (req, res) => {
   }
 });
 
+// Ruta las actividades disponibles de x dia en adelante de cualquier tipo
+router.get("/actividades/disponiblesTodo", async (req, res) => {
+  try {
+    const ahora = new Date();
+
+    const query = {
+      fechaHora: { $gte: ahora },
+    };
+
+    const actividades = await Actividades.find(query).sort({ fechaHora: 1 });
+
+    if (!actividades || actividades.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No hay actividades disponibles desde hoy" });
+    }
+
+    res.json(actividades);
+  } catch (error) {
+    console.error("Error en actividades disponibles:", error);
+    res.status(500).json({ message: "Error en el servidor" });
+  }
+});
+
 // Ruta inscripción actividad
 router.post("/actividades/reservar", async (req, res) => {
   try {
