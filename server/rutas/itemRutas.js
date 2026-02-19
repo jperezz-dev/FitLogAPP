@@ -264,7 +264,7 @@ router.get("/usuarios/:usuarioId/reservasDisponibles", async (req, res) => {
 
     const misReservas = await Actividades.find({
       usuariosInscritos: usuarioId,
-      fechaHora: { $gte: ahora }
+      fechaHora: { $gte: ahora },
     }).sort({ fechaHora: 1 });
 
     res.json(misReservas);
@@ -301,6 +301,23 @@ router.get("/usuarios/:usuarioId/historial", async (req, res) => {
     res.json(historial);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener historial" });
+  }
+});
+
+router.delete("/actividades/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const actividadEliminada = await Actividades.findByIdAndDelete(id);
+
+    if (!actividadEliminada) {
+      return res.status(404).json({ message: "La actividad no existe" });
+    }
+
+    res.json({ message: "Actividad eliminada correctamente del sistema" });
+  } catch (error) {
+    console.error("Error al eliminar actividad:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
   }
 });
 
