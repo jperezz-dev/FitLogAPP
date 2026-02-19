@@ -235,6 +235,36 @@ router.post("/actividades/reservar", async (req, res) => {
   }
 });
 
+// Ruta para cancelar reservas
+router.post("/actividades/cancelar", async (req, res) => {
+  try {
+    const { actividadId, usuarioId } = req.body;
+    await Actividades.findByIdAndUpdate(actividadId, {
+      $pull: { usuariosInscritos: usuarioId },
+    });
+    res.json({ message: "Reserva cancelada correctamente" });
+  } catch (error) {
+    res.status(500).json({ message: "Error al cancelar" });
+  }
+});
+
+router.delete("/actividades/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const actividadEliminada = await Actividades.findByIdAndDelete(id);
+
+    if (!actividadEliminada) {
+      return res.status(404).json({ message: "La actividad no existe" });
+    }
+
+    res.json({ message: "Actividad eliminada correctamente del sistema" });
+  } catch (error) {
+    console.error("Error al eliminar actividad:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+});
+
 // Ruta para recibir actividades inscritas
 router.get("/usuarios/:usuarioId/reservas", async (req, res) => {
   try {
@@ -256,37 +286,6 @@ router.get("/usuarios/:usuarioId/reservas", async (req, res) => {
   }
 });
 
-// Ruta de filtrado de actividades de X dia en adelante
-router.get("/usuarios/:usuarioId/reservasDisponibles", async (req, res) => {
-  try {
-    const { usuarioId } = req.params;
-    const ahora = new Date();
-
-    const misReservas = await Actividades.find({
-      usuariosInscritos: usuarioId,
-      fechaHora: { $gte: ahora },
-    }).sort({ fechaHora: 1 });
-
-    res.json(misReservas);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error al obtener tus reservas" });
-  }
-});
-
-// Ruta para cancelar reservas
-router.post("/actividades/cancelar", async (req, res) => {
-  try {
-    const { actividadId, usuarioId } = req.body;
-    await Actividades.findByIdAndUpdate(actividadId, {
-      $pull: { usuariosInscritos: usuarioId },
-    });
-    res.json({ message: "Reserva cancelada correctamente" });
-  } catch (error) {
-    res.status(500).json({ message: "Error al cancelar" });
-  }
-});
-
 // Ruta historial reservas
 router.get("/usuarios/:usuarioId/historial", async (req, res) => {
   try {
@@ -304,20 +303,21 @@ router.get("/usuarios/:usuarioId/historial", async (req, res) => {
   }
 });
 
-router.delete("/actividades/:id", async (req, res) => {
+// Ruta de filtrado de actividades de X dia en adelante
+router.get("/usuarios/:usuarioId/reservasDisponibles", async (req, res) => {
   try {
-    const { id } = req.params;
+    const { usuarioId } = req.params;
+    const ahora = new Date();
 
-    const actividadEliminada = await Actividades.findByIdAndDelete(id);
+    const misReservas = await Actividades.find({
+      usuariosInscritos: usuarioId,
+      fechaHora: { $gte: ahora },
+    }).sort({ fechaHora: 1 });
 
-    if (!actividadEliminada) {
-      return res.status(404).json({ message: "La actividad no existe" });
-    }
-
-    res.json({ message: "Actividad eliminada correctamente del sistema" });
+    res.json(misReservas);
   } catch (error) {
-    console.error("Error al eliminar actividad:", error);
-    res.status(500).json({ message: "Error interno del servidor" });
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener tus reservas" });
   }
 });
 
