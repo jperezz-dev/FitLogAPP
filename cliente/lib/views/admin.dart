@@ -54,7 +54,9 @@ class _AdminState extends State<Admin> {
         );
       }
     } catch (e) {
-      print("Error al crear actividad: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error al crear actividad: $e")),
+      );
     }
   }
 

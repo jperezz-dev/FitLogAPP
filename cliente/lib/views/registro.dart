@@ -45,7 +45,9 @@ class _RegistroState extends State<Registro> {
         ).showSnackBar(SnackBar(content: Text(error['message'])));
       }
     } catch (e) {
-      print("Error de conexión: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error de conexión: $e")));
     }
   }
 

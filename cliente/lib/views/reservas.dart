@@ -55,7 +55,9 @@ class _ReservasState extends State<Reservas> {
         setState(() => _misReservas = jsonDecode(response.body));
       }
     } catch (e) {
-      debugPrint("Error: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
     } finally {
       setState(() => _cargando = false);
     }
@@ -78,7 +80,9 @@ class _ReservasState extends State<Reservas> {
         ).showSnackBar(const SnackBar(content: Text("Reserva cancelada")));
       }
     } catch (e) {
-      debugPrint("Error al cancelar: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error al cancelar: $e")));
     }
   }
 
@@ -105,8 +109,7 @@ class _ReservasState extends State<Reservas> {
           Calendario(
             onFechaSeleccionada: (fecha) {
               setState(() {
-                _fechaSeleccionada =
-                    fecha;
+                _fechaSeleccionada = fecha;
                 _obtenerMisReservas();
               });
             },

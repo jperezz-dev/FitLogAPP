@@ -56,7 +56,9 @@ class _ReservaActividadState extends State<ReservaActividad> {
         setState(() => _clasesDisponibles = jsonDecode(response.body));
       }
     } catch (e) {
-      debugPrint("Error al buscar clases: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error al buscar clases: $e")));
     } finally {
       setState(() => _cargando = false);
     }
@@ -65,8 +67,7 @@ class _ReservaActividadState extends State<ReservaActividad> {
   // Reserva de actividad
   Future<void> _realizarReserva(String actividadId) async {
     final url = Uri.parse("http://10.0.2.2:3000/actividades/reservar");
-    final usuarioId =
-        UserSession().id;
+    final usuarioId = UserSession().id;
 
     try {
       final response = await http.post(
@@ -87,7 +88,9 @@ class _ReservaActividadState extends State<ReservaActividad> {
         ).showSnackBar(SnackBar(content: Text(error['message'])));
       }
     } catch (e) {
-      print("Error en reserva: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error en reserva: $e")));
     }
   }
 
@@ -110,9 +113,7 @@ class _ReservaActividadState extends State<ReservaActividad> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Calendario(
               onFechaSeleccionada: (fecha) {
                 setState(() => _fechaSeleccionada = fecha);

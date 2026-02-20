@@ -51,7 +51,9 @@ class _LoginState extends State<Login> {
         ).showSnackBar(SnackBar(content: Text(error['message'])));
       }
     } catch (e) {
-      print("Error de conexión: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error al iniciar sesión: $e")),
+      );
     }
   }
 

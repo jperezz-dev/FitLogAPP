@@ -36,7 +36,9 @@ class _PerfilState extends State<Perfil> {
         });
       }
     } catch (e) {
-      debugPrint("Error cargando historial: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error al cargar historial de atividades: $e")));
       setState(() => _cargando = false);
     }
   }
@@ -133,8 +135,7 @@ class _PerfilState extends State<Perfil> {
                   style: TextStyle(color: Colors.grey),
                 )
               : ListView.builder(
-                  shrinkWrap:
-                      true,
+                  shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: _historial.length,
                   itemBuilder: (context, index) {
@@ -155,8 +156,7 @@ class _PerfilState extends State<Perfil> {
                         imagenPath: _obtenerImagenPath(
                           reserva['tipoActividad'] ?? "",
                         ),
-                        esCancelacion:
-                            false,
+                        esCancelacion: false,
                         esAnterior: true,
                         onReserva: () {},
                       ),
