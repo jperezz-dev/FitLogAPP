@@ -39,7 +39,6 @@ export const enviarCorreoBienvenida = inngest.createFunction(
     const { correoUsuario, nombreUsuario } = event.data;
 
     await step.run("enviar-email", async () => {
-      console.log(`Enviando correo de bienvenida a ${nombreUsuario} (${correoUsuario})...`);
       const mailOptions = {
         from: `"FitLog App" <${process.env.EMAIL_USER}>`,
         to: correoUsuario,

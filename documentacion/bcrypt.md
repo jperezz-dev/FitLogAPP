@@ -69,7 +69,6 @@ Tras el login, el servidor genera un token que contiene información no sensible
       { expiresIn: process.env.JWT_ACCESS_EXPIRES_IN }
     );
 
-    console.log(`Login exitoso: ${usuario.nombreUsuario}`);
     res.json({
       message: "Inicio de sesión correcto",
       token: token,

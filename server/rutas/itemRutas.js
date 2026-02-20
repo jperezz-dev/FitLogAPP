@@ -49,7 +49,6 @@ router.post("/registro", async (req, res) => {
 
     await nuevoUsuario.save();
     res.status(201).json({ message: "Usuario creado con éxito" });
-    console.log(`Usuario registrado: ${nombreUsuario}`);
 
     // Enviar evento a Inngest
     inngest
@@ -65,6 +64,7 @@ router.post("/registro", async (req, res) => {
 
 // Ruta para crear usuarios
 router.post("/login", async (req, res) => {
+
   const validacion = LoginSchema.safeParse(req.body);
 
   if (!validacion.success) {
@@ -80,6 +80,7 @@ router.post("/login", async (req, res) => {
 
     // Busca usuario
     const usuario = await Usuario.findOne({ correoUsuario });
+
     if (!usuario)
       return res.status(400).json({ message: "Usuario inexistente" });
 
@@ -98,7 +99,6 @@ router.post("/login", async (req, res) => {
       { expiresIn: process.env.JWT_ACCESS_EXPIRES_IN },
     );
 
-    console.log(`Login exitoso: ${usuario.nombreUsuario}`);
     res.json({
       message: "Inicio de sesión correcto",
       token: token,
