@@ -2,6 +2,7 @@ import 'package:fitlog_app/widgets/calendario.dart';
 import 'package:flutter/material.dart';
 import 'package:fitlog_app/widgets/seleccion_hora.dart';
 import 'package:fitlog_app/services/user_session.dart';
+import 'package:fitlog_app/views/actividades_admin.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -20,7 +21,8 @@ class _AdminState extends State<Admin> {
   Future<void> enviarActividad() async {
     final String url = "http://10.0.2.2:3000/actividades";
 
-    final DateTime fechaHoraCombinada = DateTime( // Formato de la fecha a lo aceptado por el backend de mongo (Año-mes-dia-hora-minuto)
+    final DateTime fechaHoraCombinada = DateTime(
+      // Formato de la fecha a lo aceptado por el backend de mongo (Año-mes-dia-hora-minuto)
       _fecha.year,
       _fecha.month,
       _fecha.day,
@@ -54,9 +56,9 @@ class _AdminState extends State<Admin> {
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error al crear actividad: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error al crear actividad: $e")));
     }
   }
 
@@ -71,9 +73,42 @@ class _AdminState extends State<Admin> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Actividad nueva
-              const Text(
-                "Crear una nueva actividad:",
-                style: TextStyle(color: Colors.white, fontSize: 20),
+              Row(
+                children: [
+                  const Text(
+                    "Crear una nueva actividad:",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+
+                  const SizedBox(width: 22),
+
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xF8CD472A),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 9,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ActividadesAdmin(),
+                      ),
+                    ),
+                    child: const Text(
+                      "Ver Actividades",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
               ),
 
               const SizedBox(height: 20),
