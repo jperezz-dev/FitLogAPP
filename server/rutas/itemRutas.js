@@ -64,7 +64,6 @@ router.post("/registro", async (req, res) => {
 
 // Ruta para crear usuarios
 router.post("/login", async (req, res) => {
-
   const validacion = LoginSchema.safeParse(req.body);
 
   if (!validacion.success) {
@@ -248,6 +247,7 @@ router.post("/actividades/cancelar", async (req, res) => {
   }
 });
 
+// Ruta para borrar actividades
 router.delete("/actividades/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -261,6 +261,32 @@ router.delete("/actividades/:id", async (req, res) => {
     res.json({ message: "Actividad eliminada correctamente del sistema" });
   } catch (error) {
     console.error("Error al eliminar actividad:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+});
+
+// Ruta para editar una actividad existente
+router.put("/actividades/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { tipoActividad, fechaHora } = req.body;
+
+    const actividadActualizada = await Actividades.findByIdAndUpdate(
+      id,
+      { tipoActividad, fechaHora },
+      { new: true },
+    );
+
+    if (!actividadActualizada) {
+      return res.status(404).json({ message: "La actividad no existe" });
+    }
+
+    res.json({
+      message: "Actividad actualizada correctamente",
+      actividadActualizada,
+    });
+  } catch (error) {
+    console.error("Error al editar actividad:", error);
     res.status(500).json({ message: "Error interno del servidor" });
   }
 });
