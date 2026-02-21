@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fitlog_app/widgets/actividad_banner.dart';
+import 'package:fitlog_app/views/reserva_actividad.dart';
 
 class Inicio extends StatelessWidget {
   const Inicio({super.key});
@@ -11,9 +12,8 @@ class Inicio extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           // Anuncio spinning clases
-          _buildAnuncioSpinning(),
+          _buildAnuncioSpinning(context),
 
           const SizedBox(height: 30),
 
@@ -21,9 +21,9 @@ class Inicio extends StatelessWidget {
           const Text(
             'Actividades a tu\nmedida:',
             style: TextStyle(
-              color: Colors.white, 
-              fontSize: 22, 
-              fontWeight: FontWeight.bold
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
             ),
           ),
 
@@ -34,7 +34,13 @@ class Inicio extends StatelessWidget {
             titulo: 'Clases dirigidas de ',
             actividad: 'Crossfit',
             imagenPath: 'assets/imagen_crossfit.png',
-            onReserva: () => print("Reserva Crossfit pulsada"),
+            onReserva: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    const ReservaActividad(tipoActividad: 'Crossfit'),
+              ),
+            ),
           ),
           const SizedBox(height: 20),
 
@@ -42,7 +48,13 @@ class Inicio extends StatelessWidget {
             titulo: 'Clases dirigidas de ',
             actividad: 'Body pump',
             imagenPath: 'assets/imagen_body_pump.png',
-            onReserva: () => print("Reserva Body pump"),
+            onReserva: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    const ReservaActividad(tipoActividad: 'Body pump'),
+              ),
+            ),
           ),
           const SizedBox(height: 20),
 
@@ -50,14 +62,20 @@ class Inicio extends StatelessWidget {
             titulo: 'Clases de iniciación al ',
             actividad: 'Yoga',
             imagenPath: 'assets/imagen_yoga.png',
-            onReserva: () => print("Reserva Yoga"),
+            onReserva: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    const ReservaActividad(tipoActividad: 'Yoga'),
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildAnuncioSpinning() {
+  Widget _buildAnuncioSpinning(BuildContext context) {
     return SizedBox(
       height: 220,
       width: double.infinity,
@@ -113,9 +131,17 @@ class Inicio extends StatelessWidget {
                   ),
                   const SizedBox(height: 15),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const ReservaActividad(tipoActividad: 'Spinning'),
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFF5733),
+                      backgroundColor: const Color.fromARGB(221, 255, 88, 51),
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
