@@ -84,3 +84,9 @@ JWT_ACCESS_EXPIRES_IN=
 
 ### Panel administrativo
 <img width="445" height="907" alt="{025E13E0-E85B-43BA-9C98-13B918B47779}" src="https://github.com/user-attachments/assets/edf34d2b-c3ff-440e-ae49-2235c54b942c" />
+
+## Diagrama de caso de uso (2) para la entrega
+
+Para cumplir con los dos diagramas de caso de uso que se deben entregar he realizado el caso de uso de realizar una reserva y de crear una actividad:
+
+<img width="1304" height="598" alt="image" src="https://github.com/user-attachments/assets/1eb4df2a-8c13-412a-907b-e73890ec23fe" />
