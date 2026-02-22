@@ -23,4 +23,14 @@ class UserSession {
     administrador = data['administrador'];
     token = tokenRecibido;
   }
+
+  // Cerrar sesión
+  void borrarDatos() {
+    id = null;
+    nombre = null;
+    correo = null;
+    fechaCreacion = null;
+    administrador = null;
+    token = null;
+  }
 }

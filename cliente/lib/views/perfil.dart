@@ -1,9 +1,9 @@
 import 'package:fitlog_app/services/user_session.dart';
+import 'package:fitlog_app/views/login.dart';
 import 'package:flutter/material.dart';
 import 'package:fitlog_app/widgets/reserva.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:fitlog_app/services/user_session.dart';
 
 class Perfil extends StatefulWidget {
   const Perfil({super.key});
@@ -36,9 +36,9 @@ class _PerfilState extends State<Perfil> {
         });
       }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Error al cargar historial de atividades: $e")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error al cargar historial de atividades: $e")),
+      );
       setState(() => _cargando = false);
     }
   }
@@ -113,6 +113,31 @@ class _PerfilState extends State<Perfil> {
                   style: const TextStyle(color: Colors.white, fontSize: 18),
                 ),
               ],
+            ),
+          ),
+
+          const SizedBox(height: 10),
+
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xF8CD472A),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              onPressed: () {
+                UserSession().borrarDatos();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Login()),
+                );
+              },
+              child: const Text(
+                "Cerrar sesión",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
 
