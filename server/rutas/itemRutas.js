@@ -238,6 +238,23 @@ router.post("/actividades/reservar", async (req, res) => {
 router.post("/actividades/cancelar", async (req, res) => {
   try {
     const { actividadId, usuarioId } = req.body;
+
+    const actividad = await Actividades.findById(actividadId);
+    if (!actividad)
+      return res.status(404).json({ message: "Actividad no encontrada" });
+
+    const ahora = new Date();
+    const horaClase = new Date(actividad.fechaHora);
+    const diferencia = horaClase - ahora;
+    const diferenciaMinutos = diferencia / (1000 * 60);
+
+    if (diferenciaMinutos < 15 && diferenciaMinutos > 0) {
+      await Actividades.findByIdAndUpdate(actividadId, {
+        $pull: { usuariosInscritos: usuarioId },
+        $inc: { plazasMaximas: -1 } // Reduzco la capacidad para no dejar la plaza libre y poder desapuntar a la persona
+      });
+    }
+    
     await Actividades.findByIdAndUpdate(actividadId, {
       $pull: { usuariosInscritos: usuarioId },
     });
